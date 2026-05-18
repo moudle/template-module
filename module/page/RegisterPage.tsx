@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { CONFIG_UI_USER } from "../config-ui";
+import { Button } from "./components/Button";
 
 export function RegisterPage() {
   const [name, setName] = useState<string>('');
@@ -22,31 +23,31 @@ export function RegisterPage() {
   }
 
   return (
-    <div>
-      <div>
+    <div className="flex h-screen items-center justify-center">
+      <div className="flex flex-col gap-2 bg-zinc-50/50 p-4">
+        <div className="text-center text-xl font-bold">
+          Register Page
+        </div>
         <input
+          className="bg-zinc-100 p-2 px-4 w-100 rounded-md outline-none"
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder="Name" />
-      </div>
-      <div>
         <input
+          className="bg-zinc-100 p-2 px-4 w-100 rounded-md outline-none"
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
           placeholder="Email" />
-      </div>
-      <div>
         <input
+          className="bg-zinc-100 p-2 px-4 w-100 rounded-md outline-none"
           type="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
           placeholder="Password" />
-      </div>
-      <div>
-        <button onClick={register}>
+        <Button onClick={register}>
           {loading ? 'Loading' : 'Register'}
-        </button>
+        </Button>
       </div>
     </div>
   );

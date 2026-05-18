@@ -6,6 +6,6 @@ export function Button(props: ButtonProps) {
   return (
     <button 
       {...props}
-      className={`bg-zinc-300 ${props.className || ''}`} />
+      className={`bg-blue-500 text-white p-3 px-5 rounded-md cursor-pointer hover:bg-blue-500/90 ${props.className || ''}`} />
   );
 }
