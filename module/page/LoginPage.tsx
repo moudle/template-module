@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 import { CONFIG_UI_USER } from "../config-ui";
+import "./index.css";
+import { Button } from "./components/Button";
 
 export function LoginPage() {
   const [email, setEmail] = useState<string>('');
@@ -21,26 +23,21 @@ export function LoginPage() {
   }
 
   return (
-    <div>
-      <div>
-        <input
-          type="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          placeholder="Email" />
-      </div>
-      <div>
-        <input
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          placeholder="Password" />
-      </div>
-      <div>
-        <button onClick={login}>
-          {loading ? 'Loading' : 'Login'}
-        </button>
-      </div>
+    <div className="flex flex-col gap-2">
+      <input
+        className="bg-zinc-200"
+        type="email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        placeholder="Email" />
+      <input
+        type="password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        placeholder="Password" />
+      <Button onClick={login}>
+        {loading ? 'Loading' : 'Login'}
+      </Button>
     </div>
   );
 }
