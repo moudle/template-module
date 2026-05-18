@@ -6,16 +6,16 @@ import { signJWT } from '../jwt';
 
 export async function register(request: Request, response: Response) {
   const RegisterRequest = z.object({
-    name: z.string(),
-    email: z.string(),
-    password: z.string(),
+    name: z.string().nonempty(),
+    email: z.string().nonempty(),
+    password: z.string().nonempty(),
   });
   let register_request;
   try {
     register_request = RegisterRequest.parse(request.body);
   } catch(error){
     if(error instanceof z.ZodError) {
-      response.status(400).send(error.message); 
+      response.status(400).send(z.prettifyError(error)); 
       return;
     }
   }

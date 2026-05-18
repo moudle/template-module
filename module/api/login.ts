@@ -6,15 +6,15 @@ import { signJWT } from '../jwt';
 
 export async function login(request: Request, response: Response) {
   const LoginRequest = z.object({
-    email: z.string(),
-    password: z.string(),
+    email: z.string().nonempty(),
+    password: z.string().nonempty(),
   });
   let login_request;
   try {
     login_request = LoginRequest.parse(request.body);
   } catch(error){
     if(error instanceof z.ZodError) {
-      response.status(400).send(error.message); 
+      response.status(400).send(z.prettifyError(error)); 
       return;
     }
   }

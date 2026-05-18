@@ -23,7 +23,7 @@ export function LoginPage() {
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <div className="flex flex-col gap-2 bg-zinc-50/50 p-4">
+      <div className="flex flex-col gap-2 bg-zinc-50/50 p-4 border border-px border-zinc-200 rounded-lg">
         <div className="text-center text-xl font-bold">
           Login Page
         </div>
@@ -31,17 +31,26 @@ export function LoginPage() {
           className="bg-zinc-100 p-2 px-4 w-100 rounded-md outline-none"
           type="email"
           value={email}
+          onKeyUp={e => e.key === 'Enter' && login()}
           onChange={e => setEmail(e.target.value)}
           placeholder="Email" />
         <input
           className="bg-zinc-100 p-2 px-4 w-100 rounded-md outline-none"
           type="password"
           value={password}
+          onKeyUp={e => e.key === 'Enter' && login()}
           onChange={e => setPassword(e.target.value)}
           placeholder="Password" />
         <Button onClick={login}>
           {loading ? 'Loading' : 'Login'}
         </Button>
+        <div className="flex flex-col gap-1 items-center">
+          <a 
+            className="text-blue-700"
+            href={'/register'}>
+            Register New Account
+          </a>
+        </div>
       </div>
     </div>
   );
