@@ -1,0 +1,8 @@
+import { LIST_API_USER } from "./module/api";
+import { CONFIG_API_USER } from "./module/config-api";
+
+CONFIG_API_USER.jwt_secret_key = 'my-keyx';
+
+export default {
+  ...LIST_API_USER
+};

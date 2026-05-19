@@ -1,0 +1,9 @@
+import { CONFIG_UI_USER } from "./module/config-ui";
+import { LIST_PAGE_USER } from "./module/ui";
+
+CONFIG_UI_USER.login_redirect_path = '/register';
+CONFIG_UI_USER.register_redirect_path = '/login';
+
+export default {
+  ...LIST_PAGE_USER
+};

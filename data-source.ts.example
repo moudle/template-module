@@ -1,0 +1,18 @@
+import { DataSource } from "typeorm";
+
+export const AppDataSource = new DataSource({
+  type: "mysql",
+  host: "zero-db.naiv.dev",
+  port: 23306,
+  username: "uname_797...",
+  password: "pwd_001ee...",
+  database: "db_a495f...",
+  synchronize: false,
+  logging: false,
+  migrations: [
+    __dirname + '/migration/**.ts'
+  ],
+  entities: [
+    __dirname + '/module/db.{ts,js}'
+  ]
+});

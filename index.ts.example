@@ -1,0 +1,17 @@
+import "reflect-metadata";
+import { start } from "@moudle/start";
+import path from "path";
+import { AppDataSource } from "./data-source";
+import { json } from "express";
+import cors from 'cors';
+
+start({
+  config_api_path: path.resolve('./dist/config-api.js'),
+  config_page_path: './config-page',
+  async beforeStart(exp) {
+    await AppDataSource.initialize();
+    exp.use(cors());
+    exp.use(json({ limit: '5mb' }));
+    exp.set('trust proxy', true);
+  }
+});
