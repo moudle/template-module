@@ -8,11 +8,12 @@ Please generate the file structure and exact code for a **[INSERT YOUR USE CASE 
 - **STRICT FOLDER BOUNDARY: You MUST ONLY modify or create files inside the `module/` folder. You may install new dependencies via NPM, but NEVER modify `tsconfig.json`, `index.ts.example`, or any other configuration file outside the `module/` folder. Leave all root-level integrations to the user.**
 - **Module Name Consistency:** You must consistently replace the placeholder `[MODULE_NAME_UPPERCASE]` with the uppercase name of the module (e.g., `PRODUCT`, `BLOG`, `TASK`) across all exported constants and files to avoid naming collisions when multiple modules are installed in a host app.
 - **Strict Boilerplate:** The user should only need to modify the `"name"` property in `package.json`. The rest of the package configuration should be left as the default when first cloned.
-- **Additional Libraries:** You may install and use any NPM packages necessary to fulfill the requested use case, as long as you do not break the fundamental file structure and architectural rules outlined below.
+- **Additional Libraries:** You may install and use any NPM packages necessary to fulfill the requested use case, as long as you do not break the fundamental file structure and architectural rules outlined below. **Before installing a new library, you MUST check the existing `package.json` to ensure you are not duplicating dependencies.**
 
 ### Tech Stack
 - **Backend:** Express.js, Node.js (`@types/express`)
 - **Frontend:** React, React Router v7 (`@react-router/express`, `react-router-dom`)
+- **Styling:** Tailwind CSS (You MUST use Tailwind utility classes for all styling on React pages and components)
 - **Database & ORM:** TypeORM (You may use any database driver supported by TypeORM, e.g., `mysql2`, `pg`, `sqlite3`)
 - **Validation:** Zod
 - **Build:** TypeScript (`tsc`), `copyfiles` for assets
@@ -81,6 +82,7 @@ export let CONFIG_UI_[MODULE_NAME_UPPERCASE] = {
 
 **3. Database Layer (`module/db.ts`)**
 - Define the TypeORM `@Entity()` classes extending `BaseEntity`.
+- **You may add more than one table/model in this file if necessary, but keep it as minimal as required to solve the problem.**
 - Export all entities directly from this file.
 ```typescript
 import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn } from "typeorm"
@@ -117,6 +119,7 @@ export const LIST_API_[MODULE_NAME_UPPERCASE] = {
 
 **6. UI Pages (`module/page/*.tsx`)**
 - Create standard React components.
+- **You MUST use Tailwind CSS utility classes for styling all React pages and components.**
 
 **7. UI Router (`module/ui.tsx`)**
 *Explanation: The `loader` and `Component` keys in this configuration are based directly on the **React Router (Data Router Mode)** paradigm (e.g., `createBrowserRouter`), taking advantage of modern data loading, redirects, and rendering mechanics.*
