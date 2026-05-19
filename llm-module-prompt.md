@@ -9,6 +9,8 @@ Please generate the file structure and exact code for a **[INSERT YOUR USE CASE 
 - **Module Name Consistency:** You must consistently replace the placeholder `[MODULE_NAME_UPPERCASE]` with the uppercase name of the module (e.g., `PRODUCT`, `BLOG`, `TASK`) across all exported constants and files to avoid naming collisions when multiple modules are installed in a host app.
 - **Strict Boilerplate:** The user should only need to modify the `"name"` property in `package.json`. The rest of the package configuration should be left as the default when first cloned.
 - **Additional Libraries:** You may install and use any NPM packages necessary to fulfill the requested use case, as long as you do not break the fundamental file structure and architectural rules outlined below. **Before installing a new library, you MUST check the existing `package.json` to ensure you are not duplicating dependencies.**
+- **Scan for Existing Modules/Helpers:** Before implementing configurations or functions (like JWT helpers, DB utilities, or specific API configurations), inspect the `module/` directory to see if helpers are already present (e.g., `module/jwt.ts`). You MUST align all new properties with the exact names and contracts used in these existing utilities to prevent build/runtime compilation errors.
+- **No Truncation:** Ensure all generated files are complete, functional, and production-ready. Do not use code placeholders (e.g., `// TODO: add other routes` or `// ... rest of the code`).
 
 ### Tech Stack
 - **Backend:** Express.js, Node.js (`@types/express`)
@@ -54,7 +56,7 @@ Set up the `package.json` exactly like this (include any extra dependencies you 
 **2. Module Configuration (`module/config-api.ts` & `module/config-ui.ts`)**
 *Explanation: Instead of relying on `.env` variables (which makes the module hard to reuse), this module uses `Config API` and `Config UI` as a stub and interface. The master/kernel project that installs this module MUST implement or set the values on these configuration objects. These configurations can be static variables (like dummy strings) or stub functions that the master project replaces with actual implementations later.*
 
-- `module/config-api.ts`: Export a mutable `let CONFIG_API_[MODULE_NAME_UPPERCASE]` containing API settings.
+- `module/config-api.ts`: Export a mutable `let CONFIG_API_[MODULE_NAME_UPPERCASE]` containing API settings. Ensure you also add lifecycle event hooks (e.g. `onItemCreated`, `onUserRegistered`) so the master project can hook into module events without breaking isolation.
 ```typescript
 export let CONFIG_API_[MODULE_NAME_UPPERCASE] = {
   // Example: instead of process.env.API_SECRET, use this dummy string
@@ -117,9 +119,13 @@ export const LIST_API_[MODULE_NAME_UPPERCASE] = {
 }
 ```
 
-**6. UI Pages (`module/page/*.tsx`)**
+**6. UI Pages & Styling (`module/page/*.tsx`)**
 - Create standard React components.
-- **You MUST use Tailwind CSS utility classes for styling all React pages and components.**
+- **Visual Design Rules:** Do not implement basic or generic UI grids. Apply premium design aesthetics:
+  - Vibrant Tailwind colors, custom gradients, and sleeker dark mode palettes (avoid default light blues and plain colors).
+  - Modern card designs with borders, gradients, and micro-interactions (hover states, scaling elements).
+  - Clear user state indicators (loading animations/skeletons, distinct error alerts, and success messages).
+  - Beautiful glassmorphic structures (`bg-white/10 backdrop-blur-lg border border-white/20`) on top of colorful backgrounds where appropriate.
 
 **7. UI Router (`module/ui.tsx`)**
 *Explanation: The `loader` and `Component` keys in this configuration are based directly on the **React Router (Data Router Mode)** paradigm (e.g., `createBrowserRouter`), taking advantage of modern data loading, redirects, and rendering mechanics.*
