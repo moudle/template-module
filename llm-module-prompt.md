@@ -13,6 +13,8 @@ Please generate the file structure and exact code for a **[INSERT YOUR USE CASE 
 - **Additional Libraries:** You may install and use any NPM packages necessary to fulfill the requested use case, as long as you do not break the fundamental file structure and architectural rules outlined below. **Before installing a new library, you MUST check the existing `package.json` to ensure you are not duplicating dependencies.**
 - **Scan for Existing Modules/Helpers:** Before implementing configurations or functions (like JWT helpers, DB utilities, or specific API configurations), inspect the `module/` directory to see if helpers are already present (e.g., `module/jwt.ts`). You MUST align all new properties with the exact names and contracts used in these existing utilities to prevent build/runtime compilation errors.
 - **No Truncation:** Ensure all generated files are complete, functional, and production-ready. Do not use code placeholders (e.g., `// TODO: add other routes` or `// ... rest of the code`).
+- **Maintain Integration Documentation (README.md):** Whenever you make modifications, additions, or changes to the configuration options, properties, hooks, or stubs inside `module/config-api.ts` or `module/config-ui.ts` (or equivalent configuration files), you MUST update (or create if it does not exist) the root `README.md` to document these configurations so the master project integrates and overrides them correctly.
+
 
 ### Tech Stack
 - **Backend:** Express.js, Node.js (`@types/express`)
