@@ -345,4 +345,15 @@ export const LIST_PAGE_USER_ROLE = {
 };
 ```
 
+---
+
+## 8. Component Placement & Dead Code Cleanup
+
+To maintain a clean and structured codebase, all UI components must follow strict organization rules.
+
+### Guidelines
+- **UI Components Location**: All shared or sub-components (buttons, form inputs, badges, select boxes, etc.) must be implemented under the `module/page/components/` directory. Only main page views/controllers should reside in the root of `module/page/`.
+- **Unused Component Cleanup**: To prevent codebase rot and maintain an optimized bundle, developers can and should delete any component inside `module/page/components/` if it is no longer used by any pages or other components. Do not leave dead/orphaned UI code in the repository.
+
+
 
