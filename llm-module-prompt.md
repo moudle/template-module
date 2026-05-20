@@ -13,7 +13,7 @@ Please generate the file structure and exact code for a **[INSERT YOUR USE CASE 
 - **Additional Libraries:** You may install and use any NPM packages necessary to fulfill the requested use case, as long as you do not break the fundamental file structure and architectural rules outlined below. **Before installing a new library, you MUST check the existing `package.json` to ensure you are not duplicating dependencies.**
 - **Scan for Existing Modules/Helpers:** Before implementing configurations or functions (like JWT helpers, DB utilities, or specific API configurations), inspect the `module/` directory to see if helpers are already present (e.g., `module/jwt.ts`). You MUST align all new properties with the exact names and contracts used in these existing utilities to prevent build/runtime compilation errors.
 - **No Truncation:** Ensure all generated files are complete, functional, and production-ready. Do not use code placeholders (e.g., `// TODO: add other routes` or `// ... rest of the code`).
-- **Maintain Integration Documentation (README.md):** Whenever you make modifications, additions, or changes to the configuration options, properties, hooks, or stubs inside `module/config-api.ts` or `module/config-ui.ts` (or equivalent configuration files), you MUST update (or create if it does not exist) the root `README.md` to document these configurations so the master project integrates and overrides them correctly. This documentation should strictly focus on detailing the available configuration options (API and UI config properties and stubs) and does not need to cover standard module exports such as UI router integration mappings.
+- **Maintain Integration Documentation (README.md):** Whenever you make modifications, additions, or changes to the configuration options, properties, hooks, or stubs inside `module/config-api.ts` or `module/config-ui.tsx` (or equivalent configuration files), you MUST update (or create if it does not exist) the root `README.md` to document these configurations so the master project integrates and overrides them correctly. This documentation should strictly focus on detailing the available configuration options (API and UI config properties and stubs) and does not need to cover standard module exports such as UI router integration mappings.
 
 
 ### Tech Stack
@@ -36,7 +36,7 @@ You must strictly follow this literal file structure and export pattern. The mod
     ├── ui.tsx
     ├── db.ts
     ├── config-api.ts
-    ├── config-ui.ts
+    ├── config-ui.tsx
     ├── api/
     │   ├── [action1].ts
     │   └── [action2].ts
@@ -57,7 +57,7 @@ Set up the `package.json` exactly like this (include any extra dependencies you 
 }
 ```
 
-**2. Module Configuration (`module/config-api.ts` & `module/config-ui.ts`)**
+**2. Module Configuration (`module/config-api.ts` & `module/config-ui.tsx`)**
 *Explanation: Instead of relying on `.env` variables (which makes the module hard to reuse), this module uses `Config API` and `Config UI` as a stub and interface. The master/kernel project that installs this module MUST implement or set the values on these configuration objects. These configurations can be static variables (like dummy strings) or stub functions that the master project replaces with actual implementations later.*
 
 - `module/config-api.ts`: Export a mutable `let CONFIG_API_[MODULE_NAME_UPPERCASE]` containing API settings. Ensure you also add lifecycle event hooks (e.g. `onItemCreated`) and authorization hooks (e.g. `getUserContext`) so the master project can inject user context without breaking isolation.
@@ -83,7 +83,7 @@ export let CONFIG_API_[MODULE_NAME_UPPERCASE] = {
 }
 ```
 
-- `module/config-ui.ts`: Export a mutable `let CONFIG_UI_[MODULE_NAME_UPPERCASE]` containing UI settings (e.g., redirect paths) and session hooks. The module should NOT use `localStorage` for tokens directly; it must rely on these hooks.
+- `module/config-ui.tsx`: Export a mutable `let CONFIG_UI_[MODULE_NAME_UPPERCASE]` containing UI settings (e.g., redirect paths) and session hooks. The module should NOT use `localStorage` for tokens directly; it must rely on these hooks.
 ```typescript
 export let CONFIG_UI_[MODULE_NAME_UPPERCASE] = {
   // Example: instead of process.env.SUCCESS_REDIRECT, use this stub
@@ -163,7 +163,7 @@ export const LIST_API_[MODULE_NAME_UPPERCASE] = {
 - Export a constant `export const LIST_PAGE_[MODULE_NAME_UPPERCASE]`.
 - The keys for `LIST_PAGE_` **must** be the exact page path (e.g., `'/product'`, `'/login'`). 
 - If a page requires path parameters, use standard React Router-style routing (e.g., `'/product/:id'`).
-- Import configuration from `module/config-ui.ts` to handle dynamic routing/redirects if needed.
+- Import configuration from `module/config-ui.tsx` to handle dynamic routing/redirects if needed.
 ```typescript
 import { ProductPage } from "./page/ProductPage";
 import { ProductDetailPage } from "./page/ProductDetailPage";
