@@ -4,6 +4,6 @@ node_modules
 /lib-web-generated.tsx
 /style-generated.css
 /index.ts
-/config-page.ts
+/config-page.tsx
 /config-api.ts
 /migration
