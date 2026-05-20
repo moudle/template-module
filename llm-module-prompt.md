@@ -17,7 +17,7 @@ Please generate the file structure and exact code for a **[INSERT YOUR USE CASE 
 ### Tech Stack
 - **Backend:** Express.js, Node.js (`@types/express`)
 - **Frontend:** React, React Router v7 (`@react-router/express`, `react-router-dom`)
-- **Styling:** Tailwind CSS (You MUST use Tailwind utility classes for all styling on React pages and components)
+- **Styling:** Tailwind CSS + daisyUI (You MUST use Tailwind utility classes and daisyUI component classes for all styling on React pages and components)
 - **Database & ORM:** TypeORM (You may use any database driver supported by TypeORM, e.g., `mysql2`, `pg`, `sqlite3`)
 - **Validation:** Zod
 - **Build:** TypeScript (`tsc`), `copyfiles` for assets
@@ -146,14 +146,14 @@ export const LIST_API_[MODULE_NAME_UPPERCASE] = {
 ```
 
 **6. UI Pages & Styling (`module/page/*.tsx`)**
-- Create standard React components.
+- **Strict Guidelines Compliance**: Every React page implementation MUST strictly follow the design and functional specifications listed in [code-frontend-guidelines.md](./code-frontend-guidelines.md). All UI/page layout and interactive behavior guidelines must come from that document.
+- **Strict Module Isolation (Ask for Config API/UI)**: Because this is an isolated, plug-and-play module, **you must never hardcode environment variables, tokens, or session-checking methods directly inside the page components.** The module must remain entirely decoupled from the host application's specific authentication, routing, and database configurations. All required user contexts, credentials, hooks, and redirect paths must be queried or triggered exclusively through your module's `CONFIG_API_[MODULE_NAME_UPPERCASE]` and `CONFIG_UI_[MODULE_NAME_UPPERCASE]` settings. The specific variables, hook functions, and properties exposed in these configs will vary dynamically based on the requirements of your specific module use case.
+  - *For example (in a User/Role management module case)*: On the backend, you might obtain the active user profile using a custom hook like `CONFIG_API_[MODULE_NAME_UPPERCASE].getUserContext(req)`, while on the frontend, you might retrieve the session token using an async stub like `await CONFIG_UI_[MODULE_NAME_UPPERCASE].getSession()`. Remember that these function and variable names are **examples only** and will vary based on your actual use case.
+  - Never hardcode local storage keys or direct session cookies inside the pages.
 - **API Requests:** When using `axios` or `fetch`, always retrieve the token using `await CONFIG_UI_[MODULE_NAME_UPPERCASE].getSession()` and pass it in the `Authorization` header. DO NOT hardcode `localStorage.getItem('token')`.
 - **Dynamic Route Bindings (NO HARDCODING):** Do NOT hardcode route links (e.g., `<Link to="/products">` or `<Link to={`/products/${id}`}>`) inside React page JSX files or navigation bars. Always read the path configurations from `CONFIG_UI_[MODULE_NAME_UPPERCASE]` (e.g., `<Link to={CONFIG_UI_PUBLIC_PRODUCT.list_path}>` or `<Link to={CONFIG_UI_PUBLIC_PRODUCT.detail_path.replace(':id', product.id)}>`). This allows the host application to easily customize or prefix endpoints (e.g. changing path from `/products` to `/pub/products`) without breaking the internally-linked transitions within the module.
-- **Visual Design Rules:** Do not implement basic or generic UI grids. Apply premium design aesthetics:
-  - Vibrant Tailwind colors, custom gradients, and sleeker dark mode palettes (avoid default light blues and plain colors).
-  - Modern card designs with borders, gradients, and micro-interactions (hover states, scaling elements).
-  - Clear user state indicators (loading animations/skeletons, distinct error alerts, and success messages).
-  - Beautiful glassmorphic structures (`bg-white/10 backdrop-blur-lg border border-white/20`) on top of colorful backgrounds where appropriate.
+- **Visual Design Rules:** You MUST use daisyUI components and semantic classes for all UI styling (e.g., `btn`, `card`, `input`, `select`, `table`, etc.). Leverage daisyUI's pre-designed components and layouts to build clean, consistent, and beautiful user interfaces without writing verbose custom utility classes. Always use standard daisyUI semantic modifiers (e.g., `btn-primary`, `card-bordered`, `badge`, `alert-error`, etc.) to maintain professional visual design.
+
 
 **7. UI Router (`module/ui.tsx`)**
 *Explanation: The `loader` and `Component` keys in this configuration are based directly on the **React Router (Data Router Mode)** paradigm (e.g., `createBrowserRouter`), taking advantage of modern data loading, redirects, and rendering mechanics.*
