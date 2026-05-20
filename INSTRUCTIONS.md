@@ -1,11 +1,13 @@
 Act as an expert full-stack TypeScript developer. I want you to reconstruct a modular, plug-and-play feature module based exactly on a specific reference architecture. 
 
-The goal is to create a fully isolated feature module (e.g. for `Product`, `Blog`, or `Task` management) that follows this exact pattern. The final output must be ready to be packaged via NPM (e.g., `[module-name]`) and consumed by a main `@moudle/start` host application.
+The goal is to create a fully isolated feature module as user instructed that follows this exact pattern. The final output must be ready to be packaged via NPM (e.g., `[module-name]`) and consumed by a main `@moudle/start` host application.
 
-Please generate the file structure and exact code for a **[INSERT YOUR USE CASE HERE, e.g., Product Management Module]**.
+THIS PROJECT CONTAINS EXAMPLE `module` FOLDER with USER as an example, you should use it as reference to create the module as user instructed.
+
+YOU SHOULD NOT OPEN ANY FILES OUTSIDE `module/` FOLDER. YOU ONLY ALLOWED to create/view/edit files INSIDE `module/`.
 
 ### General Rules & Naming Convention
-- **STRICT FOLDER BOUNDARY: You MUST ONLY modify or create files inside the `module/` folder. You may install new dependencies via NPM, but NEVER modify `tsconfig.json`, `index.ts.example`, or any other configuration file outside the `module/` folder. Leave all root-level integrations to the user.**
+- **STRICT FOLDER BOUNDARY: You MUST ONLY view, modify, or create files inside the `module/` folder. You may install new dependencies via NPM, but NEVER modify `tsconfig.json`, `index.ts.example`, or any other configuration file outside the `module/` folder. Leave all root-level integrations to the user.**
 - **Module Name Consistency:** You must consistently replace the placeholder `[MODULE_NAME_UPPERCASE]` with the uppercase name of the module (e.g., `PRODUCT`, `BLOG`, `TASK`) across all exported constants and files to avoid naming collisions when multiple modules are installed in a host app.
 - **Interface Naming Prefix:** All TypeScript interfaces representing core domain models (e.g., Product, Blog, Task) must follow the `I` prefix naming convention (e.g., `IProduct`, `IBlog`, `ITask`) to clearly distinguish them from TypeORM database entities or normal classes.
 - **Avoid Orphan/Dead Imports & Code:** When replacing template files or stripping/emptying entities from database layer files (like `module/db.ts`), you MUST also clean up any references, imports, or usages of those removed entities in helper files (such as `module/jwt.ts`). Leaving dead imports of deleted database models will trigger TypeScript compiler (`tsc`) errors during the build.
@@ -187,5 +189,50 @@ export const LIST_PAGE_[MODULE_NAME_UPPERCASE] = {
 }
 ```
 
+### LLM Implementation Learnings & Common Pitfalls
+
+Based on real-world modular development experience, pay extra attention to these architectural and language gotchas to prevent compilation failures and broken user experience:
+
+1. **Avoid Circular Reference JSON Serialization Errors**:
+   - **Pitfall**: Directly sending a TypeORM database entity instance that contains bi-directional associations/relations (e.g., `res.status(201).send(journal)` where `Journal` has `items` and `JournalItem` has a `@ManyToOne` relation back to `Journal`) will cause Express to crash with: `Converting circular structure to JSON`.
+   - **Resolution**: Explicitly map and construct a clean, non-circular response payload object inside the controllers:
+     ```typescript
+     const responseData = {
+       id: entity.id,
+       ...
+       items: entity.items.map(item => ({
+         id: item.id,
+         debit: item.debit,
+         credit: item.credit
+         // DO NOT include the parent entity relation here
+       }))
+     };
+     res.status(201).send(responseData);
+     ```
+
+2. **Express 5 Param Casting**:
+   - **Pitfall**: In Express 5, `req.params` values are typed as unknown/optional parameters. Directly parsing them (e.g., `parseInt(req.params.id)`) will trigger TypeScript compiler errors.
+   - **Resolution**: Always explicitly cast URL parameters to strings before parsing:
+     ```typescript
+     const id = parseInt(req.params.id as string);
+     ```
+
+3. **Zod Error Mapping & `noImplicitAny`**:
+   - **Pitfall**: Code mapping Zod issues without explicit parameter typings, like `parseResult.error.issues.map(e => e.message)`, fails TypeScript compilation under strict `noImplicitAny` configurations.
+   - **Resolution**: Import and type the issues explicitly:
+     ```typescript
+     import { z } from "zod";
+     ...
+     const errors = parseResult.error.issues.map((e: z.ZodIssue) => e.message).join(", ");
+     ```
+
+4. **Combobox Dropdown Clipping**:
+   - **Pitfall**: Absolute-positioned popups/dropdowns (like a searchable account/product combobox on a table row) will get clipped and hidden if any parent element restricts visibility via `overflow-hidden` or scroll bounds like `max-h-72 overflow-y-auto`.
+   - **Resolution**: Ensure the scrollable container wrapper has `overflow-visible` set when rendering absolute elements on rows. Let elements expand naturally or manage layout bounds cleanly.
+
+5. **Relational Integrity vs Historical Audit Trail**:
+   - **Pitfall**: When referencing master tables (e.g., linking transactional entries to a Chart of Accounts code or Product catalogue), changing the master name in the future can alter historical logs, which violates auditing rules.
+   - **Resolution**: Always use `onDelete: 'RESTRICT'` on the foreign key relation to protect transaction records. Simultaneously, cache the exact display name (e.g. `account_name`) as a plain string inside the transactional line item. This locks the historical name for audits while preserving the relation.
+
 ### Task Execution
-Generate the entire folder structure and file contents for the requested use case matching these exact literal constraints. Provide the raw code for every file.
+Implement modules inside `module/` folder and provide the raw code for every file.
