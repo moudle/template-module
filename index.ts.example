@@ -8,6 +8,7 @@ import cors from 'cors';
 start({
   config_api_path: path.resolve('./dist/config-api.js'),
   config_page_path: './config-page',
+  customCss: '@plugin "daisyui";',
   async beforeStart(exp) {
     await AppDataSource.initialize();
     exp.use(cors());
